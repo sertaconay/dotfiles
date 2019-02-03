@@ -1,0 +1,13 @@
+[user]
+	email = sertac@onay.me
+	name = Sertaç Onay
+[core]
+	ignorecase = false
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+[alias]
+  spush = !git push -u $1 $2 && /Users/sertac/Programs/bin/-aws-git $2
