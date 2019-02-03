@@ -1,0 +1,46 @@
+alias refresh-cli-env="source ~/.zshrc"
+alias os-update="brew update && brew upgrade && ncu -g"
+
+alias docker-cli-ready="bash -c \"clear && DOCKER_HOST=tcp://192.168.99.100:2376 DOCKER_CERT_PATH=/Users/sertac/.docker/machine/machines/default DOCKER_TLS_VERIFY=1 /bin/zsh\""
+
+deploy-project() {
+  if [ -z "$1" ]; then
+    echo "\t usage: deploy-project <project_name>"
+  elif [ "$1" == "project_name" ]; then
+    if [ -z "$2" ]; then
+      echo "\t no branch name"
+    elif [ "$2" == "prod" ]; then
+      echo "\t prod project"
+    elif [ "$2" == "dev" ] || [ "$2" == "staging" ]; then
+      echo "\t $2 branch"
+      scp -r dist user@hostname:/dir
+    else
+      echo "\t unrecognized branch name"
+    fi
+  else
+      echo "\t unrecognized project name"
+  fi
+}
+
+build-project() {
+  if [ -z "$1" ]; then
+    echo "\tUsage: build-project <project_name>"
+  elif [ "$1" == "project_name" ]; then
+		(cd client && yarn && yarn build) && (cd server && yarn && yarn build)
+  else
+    echo "\t unrecognized project name"
+  fi
+}
+
+
+c9-start () {
+  forever start -a --uid $1 ~/Programs/c9sdk/server.js -l 0.0.0.0 -p $2 -w $3 -a :
+}
+
+c9-stop () {
+  forever stop $1
+}
+
+docker-run-node () {
+  docker-compose run --rm -u node node $1 $2 $3
+}
